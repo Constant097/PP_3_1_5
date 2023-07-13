@@ -16,6 +16,19 @@
     </tr>
     <tr>
       <td>
+        <label for="username">Enter username</label>
+        <input type="text" th:field="${user.username}" id="username">
+      </td>
+    </tr>
+
+    <td>
+      <label for="password">Enter password</label>
+      <input type="text" th:field="${user.password}" id="password">
+    </td>
+    </tr>
+
+    <tr>
+      <td>
         <label for="name">Enter name</label>
         <input type="text" th:field="${user.firstName}" id="name" required/>
       </td>
@@ -34,6 +47,18 @@
       </td>
     </tr>
     <br>
+    <form th:action="@{/admin/edit}" th:object="${user}" method="PATCH">
+      <p>
+        <label>Roles:
+          <input type="checkbox" name="roles"
+                 th:each="role : ${allRoles}"
+                 th:text="${role.role}"
+                 th:value="${role.id}"
+                 th:field="*{roles}"
+          />
+        </label>
+      </p>
+    </form>
     <tr>
       <td>
         <input type="submit" class="buttonEdit" value="Edit user"/>

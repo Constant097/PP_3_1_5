@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+<form th:action="@{/logout}" method="post">
+  <button type="submit">Sign Out</button>
+</form>
 <div>
   <h3><a href="/admin/new">Add user</a></h3>
   <table border="2" p>

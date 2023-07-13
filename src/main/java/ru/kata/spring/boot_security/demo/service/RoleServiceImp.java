@@ -18,16 +18,16 @@ public class RoleServiceImp implements RoleService{
 
     @Override
     public void addRole(Role role) {
-
+        roleRepos.save(role);
     }
 
     @Override
     public void deleteRole(long id) {
-
+        roleRepos.deleteById(id);
     }
 
     @Override
     public List<Role> getAllRoles() {
-        return null;
+        return roleRepos.findAll();
     }
 }
