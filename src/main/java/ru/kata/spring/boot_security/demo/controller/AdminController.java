@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import java.security.Principal;
 
 
 
@@ -21,40 +22,40 @@ public class AdminController {
         this.userService = userService;
         this.roleService = roleService;
     }
-
-
-
-
     @GetMapping()
-    public String printUsers(ModelMap model) {
+    public String printUsers(Principal principal, ModelMap model) {
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        model.addAttribute("roles", roleService.getAllRoles());
+        return "bootstrap/users";
     }
 
     @GetMapping("/new")
-    public String addUser(Model model) {
+    public String addUser(Model model,Principal principal) {
         User user = new User();
+        model.addAttribute("admin",userService.findByUsername(principal.getName()));
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.getAllRoles());
-        return "add";
+        return "bootstrap/add";
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("user") User user) {
+    @PostMapping("/add")
+    public String create(@ModelAttribute("user") User user,
+                         @RequestParam(value = "selectoradd") String[] changeRole) {
+        for (String s : changeRole) {
+            user.addRole(roleService.getRole(s));
+        }
         userService.addUser(user);
         return "redirect:/admin";
     }
 
-
-    @GetMapping("edit/{id}")
-    public String updateUser(@PathVariable("id") long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("allRoles",roleService.getAllRoles());
-        return "edit";
-    }
-
-    @PatchMapping("/edit")
-    public String update(User user) {
+    @PatchMapping("/{id}/edit")
+    public String update(@ModelAttribute("user") User user, Model model,
+                         @RequestParam(value = "selector") String[] changeRole) {
+        model.addAttribute("roles", roleService.getAllRoles());
+        for (String s : changeRole) {
+            user.addRole(roleService.getRole(s));
+        }
         userService.updateUser(user);
         return "redirect:/admin";
     }

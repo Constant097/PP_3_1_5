@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,10 +31,11 @@ public class User implements UserDetails {
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id")
-    )    private Set<Role> roles;
+    )    private Set<Role> roles = new HashSet<>();
 
 
     public User() {
+
     }
 
     public User(String username, String firstName, String lastName, int age, String password) {
@@ -125,5 +127,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }
