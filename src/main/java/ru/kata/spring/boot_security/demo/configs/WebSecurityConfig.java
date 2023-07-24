@@ -19,6 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserServiceImp userServiceImpl;
 
 
+
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler,@Lazy UserServiceImp userServiceImpl) {
         this.successUserHandler = successUserHandler;
@@ -26,6 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .csrf().disable()
                 .authorizeRequests((requests) -> requests
@@ -35,11 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .anyRequest().authenticated()
                 )
 
-                .formLogin().loginPage("/login")
+                .formLogin()
                 .successHandler(successUserHandler)
                 .loginProcessingUrl("/login")
-                .usernameParameter("j_login")
-                .passwordParameter("j_password")
+                .usernameParameter("login")
+                .passwordParameter("password")
                 .permitAll()
                 .and()
                 .logout().logoutUrl("/logout")
